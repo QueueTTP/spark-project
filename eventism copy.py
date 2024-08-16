@@ -4,7 +4,9 @@ import json
 from datetime import datetime, timedelta
 import os
 import time
-from config import db_config  # Import the configuration
+from config_source import db_config  # Import the configuration
+from mysql.connector import Error
+
 
 def clear_console():
     if os.name == 'nt':
