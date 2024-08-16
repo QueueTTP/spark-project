@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "million",
+            "database": "${workspaceFolder:spark-project}/million_events.db"
+        }
+    ]
+}

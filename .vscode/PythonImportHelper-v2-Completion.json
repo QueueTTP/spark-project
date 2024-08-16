@@ -9,21 +9,21 @@
         "documentation": {}
     },
     {
-        "label": "json",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
-        "documentation": {}
-    },
-    {
         "label": "random",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "random",
         "description": "random",
         "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
         "documentation": {}
     },
     {
@@ -40,6 +40,15 @@
         "description": "datetime",
         "isExtraImport": true,
         "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
         "documentation": {}
     },
     {
@@ -100,7 +109,7 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs\")\n    return cursor.fetchall()\n# Step 3: Generate random events\ndef generate_random_events(num_events):\n    events = []\n    event_types = [\"streamed song\", \"added to playlist\", \"removed from playlist\", \"liked song\", \"disliked song\"]\n    age_distribution = {\n        \"18-24 years old\": 30,",
+        "peekOfCode": "def fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs\")\n    return cursor.fetchall()\n# Step 3: Generate random events\ndef generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,\n                   \"removed from playlist\":5,",
         "detail": "eventism",
         "documentation": {}
     },
@@ -109,7 +118,7 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def generate_random_events(num_events):\n    events = []\n    event_types = [\"streamed song\", \"added to playlist\", \"removed from playlist\", \"liked song\", \"disliked song\"]\n    age_distribution = {\n        \"18-24 years old\": 30,\n        \"25-34 years old\": 32,\n        \"35-44 years old\": 17,\n        \"45-54 years old\": 13,\n        \"55-64 years old\": 8\n    }",
+        "peekOfCode": "def generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,\n                   \"removed from playlist\":5,\n                   \"liked song\": 15,\n                   \"disliked song\": 5\n                   }\n    age_distribution = {\n        \"18-24 years old\": 30,",
         "detail": "eventism",
         "documentation": {}
     },
@@ -118,7 +127,7 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, len(events)))\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\n# Step 5: Write the combined data to a JSON file",
+        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, len(events)))\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\n# Step 5: Write the combined data to a SQLite database",
         "detail": "eventism",
         "documentation": {}
     },
@@ -127,7 +136,7 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def write_to_json_file(data, filename):\n    with open(filename, 'w') as json_file:\n        json.dump(data, json_file, indent=4)\ndef main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 100 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()",
+        "peekOfCode": "def write_to_json_file(data, filename):\n    with open(filename, 'w') as json_file:\n        json.dump(data, json_file, indent=4)\ndef main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 10 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()",
         "detail": "eventism",
         "documentation": {}
     },
@@ -136,8 +145,44 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 100 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()\nif __name__ == \"__main__\":\n    main()",
+        "peekOfCode": "def main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 10 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()\nif __name__ == \"__main__\":\n    main()",
         "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "read_json_file",
+        "kind": 2,
+        "importPath": "json2sql",
+        "description": "json2sql",
+        "peekOfCode": "def read_json_file(filename):\n    with open(filename, 'r') as json_file:\n        return json.load(json_file)\n# Step 2: Create the SQLite database and tables\ndef create_tables(cursor):\n    cursor.execute('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INTEGER PRIMARY KEY AUTOINCREMENT,\n            track_id TEXT,\n            title TEXT,",
+        "detail": "json2sql",
+        "documentation": {}
+    },
+    {
+        "label": "create_tables",
+        "kind": 2,
+        "importPath": "json2sql",
+        "description": "json2sql",
+        "peekOfCode": "def create_tables(cursor):\n    cursor.execute('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INTEGER PRIMARY KEY AUTOINCREMENT,\n            track_id TEXT,\n            title TEXT,\n            song_id TEXT,\n            release TEXT,\n            artist_id TEXT,\n            artist_mbid TEXT,",
+        "detail": "json2sql",
+        "documentation": {}
+    },
+    {
+        "label": "insert_data",
+        "kind": 2,
+        "importPath": "json2sql",
+        "description": "json2sql",
+        "peekOfCode": "def insert_data(cursor, data):\n    for record in data:\n        record_data = record['record']\n        print(f\"Inserting record: {record_data}\")  # Debugging print statement\n        cursor.execute('''\n            INSERT INTO records (track_id, title, song_id, release, artist_id, artist_mbid, artist_name, duration, artist_familiarity, artist_hotttnesss, year, track_7digitalid)\n            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n        ''', (record_data['track_id'], record_data['title'], record_data['song_id'], record_data['release'], record_data['artist_id'], record_data['artist_mbid'], record_data['artist_name'], record_data['duration'], record_data['artist_familiarity'], record_data['artist_hotttnesss'], record_data['year'], record_data['track_7digitalid']))\n        record_id = cursor.lastrowid\n        for event in record['events']:",
+        "detail": "json2sql",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "json2sql",
+        "description": "json2sql",
+        "peekOfCode": "def main():\n    # Read the JSON data\n    data = read_json_file('output.json')\n    print(f\"Read {len(data)} records from JSON file\")  # Debugging print statement\n    # Connect to the SQLite database\n    conn = sqlite3.connect('million_events.db')\n    cursor = conn.cursor()\n    # Create the tables\n    create_tables(cursor)\n    # Insert the data",
+        "detail": "json2sql",
         "documentation": {}
     },
     {
