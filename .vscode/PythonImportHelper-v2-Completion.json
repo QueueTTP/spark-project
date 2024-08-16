@@ -43,6 +43,14 @@
         "documentation": {}
     },
     {
+        "label": "db_config",
+        "importPath": "config_template",
+        "description": "config_template",
+        "isExtraImport": true,
+        "detail": "config_template",
+        "documentation": {}
+    },
+    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
@@ -82,7 +90,7 @@
         "kind": 5,
         "importPath": "config_template",
         "description": "config_template",
-        "peekOfCode": "db_config = {\n    'host': 'your_host',\n    'user': 'your_username',\n    'password': 'your_password',\n    'database': 'your_database'\n}",
+        "peekOfCode": "db_config = mysql.connector.connect(\n                host=\"localhost\",\n                user=\"root\",\n                password=\"new_password\",\n                database=\"million_songs\"\n            )",
         "detail": "config_template",
         "documentation": {}
     },
@@ -91,7 +99,7 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def connect_to_database():\n    return mysql.connector.connect(\n        host=\"localhost\",\n        user=\"root\",\n        password=\"new_password\",\n        database=\"million_songs\"\n    )\n# Step 2: Fetch the data from the database\ndef fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)",
+        "peekOfCode": "def connect_to_database():\n    return db_config\n# Step 2: Fetch the data from the database\ndef fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs\")\n    return cursor.fetchall()\n# Step 3: Generate random events\ndef generate_random_events(num_events):\n    events = []",
         "detail": "eventism",
         "documentation": {}
     },

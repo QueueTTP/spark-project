@@ -2,15 +2,11 @@ import mysql.connector
 import random
 import json
 from datetime import datetime, timedelta
+from config_template import db_config
 
 # Step 1: Connect to the MySQL database
 def connect_to_database():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="new_password",
-        database="million_songs"
-    )
+    return db_config
 
 # Step 2: Fetch the data from the database
 def fetch_data_from_database(connection):
