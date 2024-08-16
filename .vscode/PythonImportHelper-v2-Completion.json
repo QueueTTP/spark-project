@@ -43,15 +43,6 @@
         "documentation": {}
     },
     {
-        "label": "sqlite3",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sqlite3",
-        "description": "sqlite3",
-        "detail": "sqlite3",
-        "documentation": {}
-    },
-    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
@@ -127,16 +118,16 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, len(events)))\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\n# Step 5: Write the combined data to a SQLite database",
+        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, len(events)))\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\n# Step 5: Write the combined data to an SQL file",
         "detail": "eventism",
         "documentation": {}
     },
     {
-        "label": "write_to_json_file",
+        "label": "write_to_sql_file",
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def write_to_json_file(data, filename):\n    with open(filename, 'w') as json_file:\n        json.dump(data, json_file, indent=4)\ndef main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 10 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()",
+        "peekOfCode": "def write_to_sql_file(data, filename):\n    with open(filename, 'w') as sql_file:\n        for entry in data:\n            record = entry[\"record\"]\n            events = entry[\"events\"]\n            # Write SQL INSERT statement for the record\n            sql_file.write(f\"INSERT INTO songs (track_id, title, song_id, release, artist_id, artist_mbid, artist_name, duration, artist_familiarity, artist_hotttnesss, year, track_7digitalid) VALUES ('{record['track_id']}', '{record['title']}', '{record['song_id']}', '{record['release']}', '{record['artist_id']}', '{record['artist_mbid']}', '{record['artist_name']}', {record['duration']}, {record['artist_familiarity']}, {record['artist_hotttnesss']}, {record['year']}, {record['track_7digitalid']});\\n\")\n            # Write SQL INSERT statements for the events\n            for event in events:\n                user = event[\"user\"]",
         "detail": "eventism",
         "documentation": {}
     },
@@ -145,8 +136,17 @@
         "kind": 2,
         "importPath": "eventism",
         "description": "eventism",
-        "peekOfCode": "def main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 10 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()\nif __name__ == \"__main__\":\n    main()",
+        "peekOfCode": "def main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 10 random events\n    # Create a filename with a timestamp\n    timestamp = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n    filename = f\"output_{timestamp}.sql\"\n    combined_data = combine_data_and_events(data, events)\n    write_to_sql_file(combined_data, filename)\n    connection.close()",
         "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "json2sql",
+        "description": "json2sql",
+        "peekOfCode": "def main():\n    # Read the JSON data\n    data = read_json_file('output.json')\n    print(f\"Read {len(data)} records from JSON file\")  # Debugging print statement\n    # Open the .sql file for writing\n    with open('output.sql', 'w') as sql_file:\n        # Write the SQL commands to create tables\n        create_tables(sql_file)\n        # Write the SQL commands to insert data\n        insert_data(sql_file, data)",
+        "detail": "json2sql",
         "documentation": {}
     },
     {
@@ -154,7 +154,7 @@
         "kind": 2,
         "importPath": "json2sql",
         "description": "json2sql",
-        "peekOfCode": "def read_json_file(filename):\n    with open(filename, 'r') as json_file:\n        return json.load(json_file)\n# Step 2: Create the SQLite database and tables\ndef create_tables(cursor):\n    cursor.execute('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INTEGER PRIMARY KEY AUTOINCREMENT,\n            track_id TEXT,\n            title TEXT,",
+        "peekOfCode": "def read_json_file(filename):\n    with open(filename, 'r') as file:\n        data = json.load(file)\n    return data\ndef create_tables(sql_file):\n    sql_file.write('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INT AUTO_INCREMENT PRIMARY KEY,\n            track_id VARCHAR(255),\n            title VARCHAR(255),",
         "detail": "json2sql",
         "documentation": {}
     },
@@ -163,7 +163,7 @@
         "kind": 2,
         "importPath": "json2sql",
         "description": "json2sql",
-        "peekOfCode": "def create_tables(cursor):\n    cursor.execute('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INTEGER PRIMARY KEY AUTOINCREMENT,\n            track_id TEXT,\n            title TEXT,\n            song_id TEXT,\n            release TEXT,\n            artist_id TEXT,\n            artist_mbid TEXT,",
+        "peekOfCode": "def create_tables(sql_file):\n    sql_file.write('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INT AUTO_INCREMENT PRIMARY KEY,\n            track_id VARCHAR(255),\n            title VARCHAR(255),\n            song_id VARCHAR(255),\n            release VARCHAR(255),\n            artist_id VARCHAR(255),\n            artist_mbid VARCHAR(255),",
         "detail": "json2sql",
         "documentation": {}
     },
@@ -172,16 +172,7 @@
         "kind": 2,
         "importPath": "json2sql",
         "description": "json2sql",
-        "peekOfCode": "def insert_data(cursor, data):\n    for record in data:\n        record_data = record['record']\n        print(f\"Inserting record: {record_data}\")  # Debugging print statement\n        cursor.execute('''\n            INSERT INTO records (track_id, title, song_id, release, artist_id, artist_mbid, artist_name, duration, artist_familiarity, artist_hotttnesss, year, track_7digitalid)\n            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n        ''', (record_data['track_id'], record_data['title'], record_data['song_id'], record_data['release'], record_data['artist_id'], record_data['artist_mbid'], record_data['artist_name'], record_data['duration'], record_data['artist_familiarity'], record_data['artist_hotttnesss'], record_data['year'], record_data['track_7digitalid']))\n        record_id = cursor.lastrowid\n        for event in record['events']:",
-        "detail": "json2sql",
-        "documentation": {}
-    },
-    {
-        "label": "main",
-        "kind": 2,
-        "importPath": "json2sql",
-        "description": "json2sql",
-        "peekOfCode": "def main():\n    # Read the JSON data\n    data = read_json_file('output.json')\n    print(f\"Read {len(data)} records from JSON file\")  # Debugging print statement\n    # Connect to the SQLite database\n    conn = sqlite3.connect('million_events.db')\n    cursor = conn.cursor()\n    # Create the tables\n    create_tables(cursor)\n    # Insert the data",
+        "peekOfCode": "def insert_data(sql_file, data):\n    for record in data:\n        record_data = record['record']\n        print(f\"Inserting record: {record_data}\")  # Debugging print statement\n        sql_file.write(f'''\n            INSERT INTO records (track_id, title, song_id, release, artist_id, artist_mbid, artist_name, duration, artist_familiarity, artist_hotttnesss, year, track_7digitalid)\n            VALUES ('{record_data['track_id']}', '{record_data['title']}', '{record_data['song_id']}', '{record_data['release']}', '{record_data['artist_id']}', '{record_data['artist_mbid']}', '{record_data['artist_name']}', {record_data['duration']}, {record_data['artist_familiarity']}, {record_data['artist_hotttnesss']}, {record_data['year']}, {record_data['track_7digitalid']});\n        ''')\n        record_id = 'LAST_INSERT_ID()'  # Use MySQL function to get the last inserted ID\n        for event in record['events']:",
         "detail": "json2sql",
         "documentation": {}
     },

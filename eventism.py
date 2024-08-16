@@ -166,20 +166,31 @@ def combine_data_and_events(data, events):
         })
     return combined
 
-# Step 5: Write the combined data to a SQLite database
-def write_to_json_file(data, filename):
-    with open(filename, 'w') as json_file:
-        json.dump(data, json_file, indent=4)
-
-
-
-
+# Step 5: Write the combined data to an SQL file
+def write_to_sql_file(data, filename):
+    with open(filename, 'w') as sql_file:
+        for entry in data:
+            record = entry["record"]
+            events = entry["events"]
+            # Write SQL INSERT statement for the record
+            sql_file.write(f"INSERT INTO songs (track_id, title, song_id, release, artist_id, artist_mbid, artist_name, duration, artist_familiarity, artist_hotttnesss, year, track_7digitalid) VALUES ('{record['track_id']}', '{record['title']}', '{record['song_id']}', '{record['release']}', '{record['artist_id']}', '{record['artist_mbid']}', '{record['artist_name']}', {record['duration']}, {record['artist_familiarity']}, {record['artist_hotttnesss']}, {record['year']}, {record['track_7digitalid']});\n")
+            # Write SQL INSERT statements for the events
+            for event in events:
+                user = event["user"]
+                sql_file.write(f"INSERT INTO events (event_type, timestamp, user_id, user_name, user_age, user_gender, user_main_genre, user_subscription_plan, user_platform, user_state, user_os, user_current_page) VALUES ('{event['event_type']}', '{event['timestamp']}', {user['id']}, '{user['name']}', '{user['age']}', '{user['gender']}', '{user['main_genre']}', '{user['subscription_plan']}', '{user['platform']}', '{user['state']}', '{user['OS'][0]}', '{user['current_page']}');\n")
+            # Write SQL INSERT statements for the events
+            for event in events:
+                user = event["user"]
+                sql_file.write(f"INSERT INTO events (event_type, timestamp, user_id, user_name, user_age, user_gender, user_main_genre, user_subscription_plan, user_platform, user_state, user_os, user_current_page) VALUES ('{event['event_type']}', '{event['timestamp']}', {user['id']}, '{user['name']}', '{user['age']}', '{user['gender']}', '{user['main_genre']}', '{user['subscription_plan']}', '{user['platform']}', '{user['state']}', '{user['OS'][0]}', '{user['current_page']}');\n")
 def main():
     connection = connect_to_database()
     data = fetch_data_from_database(connection)
     events = generate_random_events(10)  # Generate 10 random events
+    # Create a filename with a timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    filename = f"output_{timestamp}.sql"
     combined_data = combine_data_and_events(data, events)
-    write_to_json_file(combined_data, 'output.json')
+    write_to_sql_file(combined_data, filename)
     connection.close()
 
 if __name__ == "__main__":
