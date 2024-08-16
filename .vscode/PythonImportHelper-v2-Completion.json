@@ -1,0 +1,179 @@
+[
+    {
+        "label": "mysql.connector",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "mysql.connector",
+        "description": "mysql.connector",
+        "detail": "mysql.connector",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "db_config",
+        "importPath": "config",
+        "description": "config",
+        "isExtraImport": true,
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "db_config",
+        "kind": 5,
+        "importPath": "config_template",
+        "description": "config_template",
+        "peekOfCode": "db_config = {\n    'host': 'your_host',\n    'user': 'your_username',\n    'password': 'your_password',\n    'database': 'your_database'\n}",
+        "detail": "config_template",
+        "documentation": {}
+    },
+    {
+        "label": "connect_to_database",
+        "kind": 2,
+        "importPath": "eventism",
+        "description": "eventism",
+        "peekOfCode": "def connect_to_database():\n    return mysql.connector.connect(\n        host=\"localhost\",\n        user=\"root\",\n        password=\"new_password\",\n        database=\"million_songs\"\n    )\n# Step 2: Fetch the data from the database\ndef fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)",
+        "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "fetch_data_from_database",
+        "kind": 2,
+        "importPath": "eventism",
+        "description": "eventism",
+        "peekOfCode": "def fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs\")\n    return cursor.fetchall()\n# Step 3: Generate random events\ndef generate_random_events(num_events):\n    events = []\n    event_types = [\"streamed song\", \"added to playlist\", \"removed from playlist\", \"liked song\", \"disliked song\"]\n    age_distribution = {\n        \"18-24 years old\": 30,",
+        "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "generate_random_events",
+        "kind": 2,
+        "importPath": "eventism",
+        "description": "eventism",
+        "peekOfCode": "def generate_random_events(num_events):\n    events = []\n    event_types = [\"streamed song\", \"added to playlist\", \"removed from playlist\", \"liked song\", \"disliked song\"]\n    age_distribution = {\n        \"18-24 years old\": 30,\n        \"25-34 years old\": 32,\n        \"35-44 years old\": 17,\n        \"45-54 years old\": 13,\n        \"55-64 years old\": 8\n    }",
+        "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "combine_data_and_events",
+        "kind": 2,
+        "importPath": "eventism",
+        "description": "eventism",
+        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, len(events)))\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\n# Step 5: Write the combined data to a JSON file",
+        "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "write_to_json_file",
+        "kind": 2,
+        "importPath": "eventism",
+        "description": "eventism",
+        "peekOfCode": "def write_to_json_file(data, filename):\n    with open(filename, 'w') as json_file:\n        json.dump(data, json_file, indent=4)\ndef main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 100 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()",
+        "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "eventism",
+        "description": "eventism",
+        "peekOfCode": "def main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 100 random events\n    combined_data = combine_data_and_events(data, events)\n    write_to_json_file(combined_data, 'output.json')\n    connection.close()\nif __name__ == \"__main__\":\n    main()",
+        "detail": "eventism",
+        "documentation": {}
+    },
+    {
+        "label": "clear_console",
+        "kind": 2,
+        "importPath": "retrieve_sim",
+        "description": "retrieve_sim",
+        "peekOfCode": "def clear_console():\n    if os.name == 'nt':\n        _ = os.system('clear')\n# Function to get random data from MySQL\ndef get_random_data():\n    try:\n        conn = mysql.connector.connect(**db_config)\n        cursor = conn.cursor(dictionary=True)\n        query = \"\"\"\n        SELECT `track_id`, `title`, `song_id`, `release`, `artist_id`, `artist_mbid`, ",
+        "detail": "retrieve_sim",
+        "documentation": {}
+    },
+    {
+        "label": "get_random_data",
+        "kind": 2,
+        "importPath": "retrieve_sim",
+        "description": "retrieve_sim",
+        "peekOfCode": "def get_random_data():\n    try:\n        conn = mysql.connector.connect(**db_config)\n        cursor = conn.cursor(dictionary=True)\n        query = \"\"\"\n        SELECT `track_id`, `title`, `song_id`, `release`, `artist_id`, `artist_mbid`, \n               `artist_name`, `duration`, `artist_familiarity`, `artist_hotttnesss`, \n               `year`, `track_7digitalid`\n        FROM songs\n        ORDER BY RAND()",
+        "detail": "retrieve_sim",
+        "documentation": {}
+    },
+    {
+        "label": "simulate_listen_event",
+        "kind": 2,
+        "importPath": "retrieve_sim",
+        "description": "retrieve_sim",
+        "peekOfCode": "def simulate_listen_event(track):\n    print(f\"Simulated listen event for track: {track['title']} by {track['artist_name']}\")\n# Main simulation loop\ndef run_simulation():\n    for i in range(5):  # 5 iterations = 10 minutes\n        clear_console()\n        print(f\"Iteration {i+1} - Time: {time.strftime('%Y-%m-%d %H:%M:%S')}\")\n        df = get_random_data()\n        if not df.empty:\n            print(df)",
+        "detail": "retrieve_sim",
+        "documentation": {}
+    },
+    {
+        "label": "run_simulation",
+        "kind": 2,
+        "importPath": "retrieve_sim",
+        "description": "retrieve_sim",
+        "peekOfCode": "def run_simulation():\n    for i in range(5):  # 5 iterations = 10 minutes\n        clear_console()\n        print(f\"Iteration {i+1} - Time: {time.strftime('%Y-%m-%d %H:%M:%S')}\")\n        df = get_random_data()\n        if not df.empty:\n            print(df)\n            # Simulate a listen event for each track\n            for _, track in df.iterrows():\n                simulate_listen_event(track)",
+        "detail": "retrieve_sim",
+        "documentation": {}
+    }
+]
