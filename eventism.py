@@ -121,7 +121,19 @@ def generate_random_events(num_events):
     "macOS": 0.20,
     "Other": 0.19
     }
-   
+    page_distribution = {
+    "Home/Discover Page": 35,
+    "Now Playing Page": 25,
+    "Library/My Music Page": 15,
+    "Search Page": 10,
+    "Playlist Page": 5,
+    "Artist Page": 3,
+    "Album Page": 2,
+    "Trending/Charts Page": 2,
+    "Settings Page": 1,
+    "Profile Page": 1,
+    "Genre/Category Page": 1
+    }
     for _ in range(num_events):
         event = {
             "event_type": random.choices(list(event_types.keys()), weights=event_types.values())[0],
@@ -135,7 +147,8 @@ def generate_random_events(num_events):
                 "subscription_plan": random.choices(['Paid', 'UnPaid'], weights=[paid_user_probability, 1 - paid_user_probability])[0],
                 "platform": random.choices(list(platform_distribution.keys()), weights=platform_distribution.values())[0],
                 "state": random.choices(list(state_distribution.keys()), weights=state_distribution.values())[0],
-                "OS": random.choices(list(system_distribution.keys()), weights=system_distribution.values())
+                "OS": random.choices(list(system_distribution.keys()), weights=system_distribution.values()),
+                "current_page": random.choices(list(page_distribution.keys()), weights=page_distribution.values())[0]
             },
         }
         events.append(event)
