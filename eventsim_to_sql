@@ -8,6 +8,36 @@ from mysql.connector import Error
 from config_source import db_config_source
 from config_destination import db_config_destination
 
+
+def get_weighted_time_of_day():
+    time_of_day_weights = {
+        "00:00-04:00": 2,    # Early morning, less likely
+        "04:00-06:00": 5,    # Early morning
+        "06:00-09:00": 15,   # Morning commute
+        "09:00-12:00": 25,   # Morning work hours
+        "12:00-15:00": 30,   # Afternoon work hours
+        "15:00-18:00": 35,   # Evening commute
+        "18:00-21:00": 50,   # Evening leisure time, most likely
+        "21:00-23:59": 20    # Late evening
+    }
+
+    chosen_range = random.choices(list(time_of_day_weights.keys()), weights=time_of_day_weights.values())[0]
+    start, end = chosen_range.split('-')
+    
+    start_time = datetime.strptime(start, "%H:%M")
+    end_time = datetime.strptime(end, "%H:%M") if end != "23:59" else datetime.strptime("23:59", "%H:%M")
+    
+    total_minutes = int((end_time - start_time).total_seconds() // 60)
+    random_minutes = random.randint(0, total_minutes)
+    random_time = (start_time + timedelta(minutes=random_minutes)).time()
+    
+    return random_time
+
+def generate_random_timestamp():
+    random_date = datetime.now() - timedelta(days=random.randint(0, 365))
+    random_time = get_weighted_time_of_day()
+    return datetime.combine(random_date.date(), random_time)
+
 # Global flag to indicate if the program should exit
 should_exit = False
 
@@ -36,136 +66,85 @@ def fetch_data_from_database(connection, limit=1000):
     """, (limit,))
     return cursor.fetchall()
 
+# Option 2: Ensuring that some users listen to multiple songs
+user_id_pool = [random.randint(1, 1000) for _ in range(100)]  # Create a pool of 100 user IDs
+
 def generate_random_events(num_events):
     events = []
-    event_types = {"streamed song": 65,
-                   "added to playlist": 10,
-                   "removed from playlist":5,
-                   "liked song": 15,
-                   "disliked song": 5
-                   }
+
+    # Event types and distributions
+    event_types = {
+        "streamed song": 65, 
+        "added to playlist": 10, 
+        "removed from playlist": 5, 
+        "liked song": 15, 
+        "disliked song": 5
+    }
+
+    # Updated age distribution to reflect fewer older users
     age_distribution = {
-        "18-24 years old": 30,
-        "25-34 years old": 32,
-        "35-44 years old": 17,
-        "45-54 years old": 13,
-        "55-64 years old": 8
+        "18-24 years old": 50,   # Increase weight for younger users
+        "25-34 years old": 35,
+        "35-44 years old": 10,
+        "45-54 years old": 4,
+        "55-64 years old": 1     # Decrease weight for older users
     }
-    gender_distribution = {
-    "Male": 55,
-    "Female": 40,
-    "Non-binary": 5
+    gender_distribution = {"Male": 55, "Female": 40, "Non-binary": 5}
+    
+    # Genre popularity trends over the years (simplified)
+    genre_trends = {
+        "2000": {
+            "pop": 31, "rock": 34.8, "R&B": 17.5, "hip hop": 10, "country": 13.8,
+            "electronic": 3.0, "latin": 2.9, "jazz": 2.3, "classical": 2.8,
+            "alternative": 17.4, "metal": 10.2, "reggae": 1.5, "blues": 1.2
+        },
+        "2010": {
+            "pop": 33, "rock": 30, "R&B": 18, "hip hop": 12, "country": 14,
+            "electronic": 4.5, "latin": 3.5, "jazz": 2.0, "classical": 2.5,
+            "alternative": 18, "metal": 9, "reggae": 1.8, "blues": 1.0, "dance": 5
+        },
+        "2020": {
+            "pop": 31, "rock": 16.2, "R&B": 17.5, "hip hop": 26.6, "country": 11.6,
+            "electronic": 4.9, "latin": 5.8, "jazz": 2.3, "classical": 3.1,
+            "alternative": 2.1, "trap": 8, "reggaeton": 4, "K-pop": 3, "indie": 2.5
+        }
     }
-    main_genre_distribution = {
-    "Hip-Hop/R&B": 26.6,
-    "Rock": 16.2,
-    "Pop": 12.6,
-    "Country": 11.6,
-    "Latin": 5.8,
-    "Electronic/Dance": 4.9,
-    "Classical": 3.1,
-    "Jazz": 2.3,
-    "Indie/Alternative": 2.1,
-    "Other": 14.8  # Includes various other genres
-    }
-    paid_user_probability = 0.578
-    platform_distribution = {
-    "Spotify": 36,
-    "Apple Music": 30.7,
-    "Amazon Music": 23.8,
-    "YouTube Music": 6.8,
-    "Pandora Premium": 1.9,
-    "Tidal": 0.5,
-    "SoundCloud": 0.3
-    }
+
+    # State distribution
     state_distribution = {
-    "Alabama": 1,
-    "Alaska": 1,
-    "Arizona": 2,
-    "Arkansas": 1,
-    "California": 14,
-    "Colorado": 2,
-    "Connecticut": 1,
-    "Delaware": 1,
-    "Florida": 7,
-    "Georgia": 4,
-    "Hawaii": 1,
-    "Idaho": 1,
-    "Illinois": 5,
-    "Indiana": 2,
-    "Iowa": 1,
-    "Kansas": 1,
-    "Kentucky": 1,
-    "Louisiana": 1,
-    "Maine": 1,
-    "Maryland": 2,
-    "Massachusetts": 2,
-    "Michigan": 3,
-    "Minnesota": 2,
-    "Mississippi": 1,
-    "Missouri": 2,
-    "Montana": 1,
-    "Nebraska": 1,
-    "Nevada": 1,
-    "New Hampshire": 1,
-    "New Jersey": 3,
-    "New Mexico": 1,
-    "New York": 8,
-    "North Carolina": 3,
-    "North Dakota": 1,
-    "Ohio": 4,
-    "Oklahoma": 1,
-    "Oregon": 1,
-    "Pennsylvania": 5,
-    "Rhode Island": 1,
-    "South Carolina": 1,
-    "South Dakota": 1,
-    "Tennessee": 2,
-    "Texas": 10,
-    "Utah": 1,
-    "Vermont": 1,
-    "Virginia": 2,
-    "Washington": 2,
-    "Washington D.C.": 1,
-    "West Virginia": 1,
-    "Wisconsin": 2,
-    "Wyoming": 1
+        "Alabama": 1, "Alaska": 1, "Arizona": 2, "Arkansas": 1, "California": 14,
+        "Colorado": 2, "Connecticut": 1, "Delaware": 1, "Florida": 7, "Georgia": 4,
+        "Hawaii": 1, "Idaho": 1, "Illinois": 5, "Indiana": 2, "Iowa": 1, "Kansas": 1,
+        "Kentucky": 1, "Louisiana": 1, "Maine": 1, "Maryland": 2, "Massachusetts": 2,
+        "Michigan": 3, "Minnesota": 2, "Mississippi": 1, "Missouri": 2, "Montana": 1,
+        "Nebraska": 1, "Nevada": 1, "New Hampshire": 1, "New Jersey": 3, "New Mexico": 1,
+        "New York": 8, "North Carolina": 3, "North Dakota": 1, "Ohio": 4, "Oklahoma": 1,
+        "Oregon": 1, "Pennsylvania": 5, "Rhode Island": 1, "South Carolina": 1, "South Dakota": 1,
+        "Tennessee": 2, "Texas": 10, "Utah": 1, "Vermont": 1, "Virginia": 2, "Washington": 2,
+        "Washington D.C.": 1, "West Virginia": 1, "Wisconsin": 2, "Wyoming": 1
     }
-    system_distribution = {
-    "Android": 28.28,
-    "iOS": 70.92,
-    "Windows": 0.41,
-    "macOS": 0.20,
-    "Other": 0.19
-    }
-    page_distribution = {
-    "Home/Discover Page": 35,
-    "Now Playing Page": 25,
-    "Library/My Music Page": 15,
-    "Search Page": 10,
-    "Playlist Page": 5,
-    "Artist Page": 3,
-    "Album Page": 2,
-    "Trending/Charts Page": 2,
-    "Settings Page": 1,
-    "Profile Page": 1,
-    "Genre/Category Page": 1
-    }
+
+    # Generate random events based on genre popularity trends
     for _ in range(num_events):
+        current_year = random.choice(list(genre_trends.keys()))
+        genre_distribution = genre_trends[current_year]
+        
+        user_id = random.choice(user_id_pool)
+
         event = {
             "event_type": random.choices(list(event_types.keys()), weights=event_types.values())[0],
-            "timestamp": (datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(),
+            "timestamp": generate_random_timestamp().isoformat(),
             "user": {
-                "id": random.randint(1, 1000),  # Associate each event with a user ID from 1 to 1000
-                "name": f"User{random.randint(1, 1000)}",
+                "id": user_id,
+                "name": f"User{user_id}",
                 "age": random.choices(list(age_distribution.keys()), weights=age_distribution.values())[0],
                 "gender": random.choices(list(gender_distribution.keys()), weights=gender_distribution.values())[0],
-                "main_genre": random.choices(list(main_genre_distribution.keys()), weights=main_genre_distribution.values())[0],
-                "subscription_plan": random.choices(['Paid', 'UnPaid'], weights=[paid_user_probability, 1 - paid_user_probability])[0],
-                "platform": random.choices(list(platform_distribution.keys()), weights=platform_distribution.values())[0],
+                "main_genre": random.choices(list(genre_distribution.keys()), weights=genre_distribution.values())[0],
+                "subscription_plan": random.choices(['Paid', 'UnPaid'], weights=[0.578, 0.422])[0],
+                "platform": random.choices(["Spotify", "Apple Music", "Amazon Music", "YouTube Music", "Pandora Premium", "Tidal", "SoundCloud"], weights=[36, 30.7, 23.8, 6.8, 1.9, 0.5, 0.3])[0],
                 "state": random.choices(list(state_distribution.keys()), weights=state_distribution.values())[0],
-                "OS": random.choices(list(system_distribution.keys()), weights=system_distribution.values()),
-                "current_page": random.choices(list(page_distribution.keys()), weights=page_distribution.values())[0]
+                "OS": random.choices(["Android", "iOS", "Windows", "macOS", "Other"], weights=[28.28, 70.92, 0.41, 0.2, 0.19])[0],
+                "current_page": random.choices(["Home/Discover Page", "Now Playing Page", "Library/My Music Page", "Search Page", "Playlist Page", "Artist Page", "Album Page", "Trending/Charts Page", "Settings Page", "Profile Page", "Genre/Category Page"], weights=[35, 25, 15, 10, 5, 3, 2, 2, 1, 1, 1])[0],
             },
         }
         events.append(event)
@@ -231,8 +210,8 @@ def write_to_event_sim_db(data, connection):
         INSERT INTO `events` (
             `event_type`, `timestamp`, `user_id`, `user_name`, `user_age`, `user_gender`, `user_main_genre`, 
             `user_subscription_plan`, `user_platform`, `user_state`, `user_os`, `user_current_page`,
-            `track_id`, `title`, `song_id`, `release`, `artist_id`, `artist_mbid`, `artist_name`, `duration`, 
-            `artist_familiarity`, `artist_hotttnesss`, `year`, `track_7digitalid`
+            `track_id`, `title`, `song_id`, `release`, `artist_id`, `artist_mbid`, `artist_name`, 
+            `duration`, `artist_familiarity`, `artist_hotttnesss`, `year`, `track_7digitalid`
         ) VALUES (
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )
@@ -245,14 +224,30 @@ def write_to_event_sim_db(data, connection):
             for event in events:
                 user = event["user"]
                 insert_data = (
-                    event['event_type'], event['timestamp'], user['id'], user['name'], 
-                    user['age'], user['gender'], user['main_genre'], 
-                    user['subscription_plan'], user['platform'], user['state'], 
-                    user['OS'][0], user['current_page'], record['track_id'], 
-                    record['title'], record['song_id'], record['release'], 
-                    record['artist_id'], record['artist_mbid'], record['artist_name'], 
-                    record['duration'], record['artist_familiarity'], 
-                    record['artist_hotttnesss'], record['year'], record['track_7digitalid']
+                    event['event_type'], 
+                    event['timestamp'],  # This is now the weighted random timestamp
+                    user['id'], 
+                    user['name'], 
+                    user['age'], 
+                    user['gender'], 
+                    user['main_genre'], 
+                    user['subscription_plan'], 
+                    user['platform'], 
+                    user['state'], 
+                    user['OS'], 
+                    user['current_page'],
+                    record['track_id'], 
+                    record['title'], 
+                    record['song_id'], 
+                    record['release'], 
+                    record['artist_id'], 
+                    record['artist_mbid'], 
+                    record['artist_name'], 
+                    record['duration'], 
+                    record['artist_familiarity'], 
+                    record['artist_hotttnesss'], 
+                    record['year'], 
+                    record['track_7digitalid']
                 )
                 cursor.execute(insert_query, insert_data)
 
@@ -261,6 +256,8 @@ def write_to_event_sim_db(data, connection):
 
     except mysql.connector.Error as e:
         print(f"Error: {e}")
+        connection.rollback()
+        print("Transaction rolled back due to error.")
 
     finally:
         cursor.close()
