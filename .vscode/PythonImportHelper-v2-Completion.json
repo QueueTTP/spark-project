@@ -1,10 +1,43 @@
 [
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
         "label": "mysql.connector",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "mysql.connector",
         "description": "mysql.connector",
+        "detail": "mysql.connector",
+        "documentation": {}
+    },
+    {
+        "label": "Error",
+        "importPath": "mysql.connector",
+        "description": "mysql.connector",
+        "isExtraImport": true,
         "detail": "mysql.connector",
         "documentation": {}
     },
@@ -43,11 +76,20 @@
         "documentation": {}
     },
     {
-        "label": "db_config",
-        "importPath": "config_template",
-        "description": "config_template",
+        "label": "time",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "config_template",
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "db_config",
+        "importPath": "config_source",
+        "description": "config_source",
+        "isExtraImport": true,
+        "detail": "config_source",
         "documentation": {}
     },
     {
@@ -60,29 +102,29 @@
         "documentation": {}
     },
     {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
-        "documentation": {}
-    },
-    {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
-        "documentation": {}
-    },
-    {
         "label": "db_config",
         "importPath": "config",
         "description": "config",
         "isExtraImport": true,
         "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "db_config_destination",
+        "kind": 5,
+        "importPath": "config_destination",
+        "description": "config_destination",
+        "peekOfCode": "db_config_destination = {\n    'host': os.getenv('DB_HOST'),\n    'user': os.getenv('DB_USER'),\n    'password': os.getenv('DB_PASSWORD'),\n    'database': os.getenv('DB_NAME2')\n}",
+        "detail": "config_destination",
+        "documentation": {}
+    },
+    {
+        "label": "db_config",
+        "kind": 5,
+        "importPath": "config_source",
+        "description": "config_source",
+        "peekOfCode": "db_config = {\n    'host': os.getenv('DB_HOST'),\n    'user': os.getenv('DB_USER'),\n    'password': os.getenv('DB_PASSWORD'),\n    'database': os.getenv('DB_NAME')\n}",
+        "detail": "config_source",
         "documentation": {}
     },
     {
@@ -95,93 +137,75 @@
         "documentation": {}
     },
     {
+        "label": "clear_console",
+        "kind": 2,
+        "importPath": "eventism copy",
+        "description": "eventism copy",
+        "peekOfCode": "def clear_console():\n    if os.name == 'nt':\n        _ = os.system('clear')\ndef connect_to_database():\n    return mysql.connector.connect(**db_config)\ndef fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs ORDER BY RAND() LIMIT %s\", (limit,))\n    return cursor.fetchall()\ndef generate_random_events(num_events):",
+        "detail": "eventism copy",
+        "documentation": {}
+    },
+    {
         "label": "connect_to_database",
         "kind": 2,
-        "importPath": "eventism",
-        "description": "eventism",
-        "peekOfCode": "def connect_to_database():\n    return db_config\n# Step 2: Fetch the data from the database\ndef fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs\")\n    return cursor.fetchall()\n# Step 3: Generate random events\ndef generate_random_events(num_events):\n    events = []",
-        "detail": "eventism",
+        "importPath": "eventism copy",
+        "description": "eventism copy",
+        "peekOfCode": "def connect_to_database():\n    return mysql.connector.connect(**db_config)\ndef fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs ORDER BY RAND() LIMIT %s\", (limit,))\n    return cursor.fetchall()\ndef generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,",
+        "detail": "eventism copy",
         "documentation": {}
     },
     {
         "label": "fetch_data_from_database",
         "kind": 2,
-        "importPath": "eventism",
-        "description": "eventism",
-        "peekOfCode": "def fetch_data_from_database(connection):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs\")\n    return cursor.fetchall()\n# Step 3: Generate random events\ndef generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,\n                   \"removed from playlist\":5,",
-        "detail": "eventism",
+        "importPath": "eventism copy",
+        "description": "eventism copy",
+        "peekOfCode": "def fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs ORDER BY RAND() LIMIT %s\", (limit,))\n    return cursor.fetchall()\ndef generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,\n                   \"removed from playlist\":5,\n                   \"liked song\": 15,",
+        "detail": "eventism copy",
         "documentation": {}
     },
     {
         "label": "generate_random_events",
         "kind": 2,
-        "importPath": "eventism",
-        "description": "eventism",
+        "importPath": "eventism copy",
+        "description": "eventism copy",
         "peekOfCode": "def generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,\n                   \"removed from playlist\":5,\n                   \"liked song\": 15,\n                   \"disliked song\": 5\n                   }\n    age_distribution = {\n        \"18-24 years old\": 30,",
-        "detail": "eventism",
+        "detail": "eventism copy",
+        "documentation": {}
+    },
+    {
+        "label": "create_folder",
+        "kind": 2,
+        "importPath": "eventism copy",
+        "description": "eventism copy",
+        "peekOfCode": "def create_folder(base_path):\n    folder_count = 1\n    while True:\n        folder_name = f\"folder_{folder_count:03d}\"\n        folder_path = os.path.join(base_path, folder_name)\n        if not os.path.exists(folder_path):\n            os.makedirs(folder_path)\n            return folder_path\n        folder_count += 1\ndef combine_data_and_events(data, events):",
+        "detail": "eventism copy",
         "documentation": {}
     },
     {
         "label": "combine_data_and_events",
         "kind": 2,
-        "importPath": "eventism",
-        "description": "eventism",
-        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, len(events)))\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\n# Step 5: Write the combined data to an SQL file",
-        "detail": "eventism",
+        "importPath": "eventism copy",
+        "description": "eventism copy",
+        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, min(5, len(events))))  # Limit to max 5 events per record\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\ndef write_to_sql_file(data, filename):",
+        "detail": "eventism copy",
         "documentation": {}
     },
     {
         "label": "write_to_sql_file",
         "kind": 2,
-        "importPath": "eventism",
-        "description": "eventism",
-        "peekOfCode": "def write_to_sql_file(data, filename):\n    with open(filename, 'w') as sql_file:\n        for entry in data:\n            record = entry[\"record\"]\n            events = entry[\"events\"]\n            # Write SQL INSERT statement for the record\n            sql_file.write(f\"INSERT INTO songs (track_id, title, song_id, release, artist_id, artist_mbid, artist_name, duration, artist_familiarity, artist_hotttnesss, year, track_7digitalid) VALUES ('{record['track_id']}', '{record['title']}', '{record['song_id']}', '{record['release']}', '{record['artist_id']}', '{record['artist_mbid']}', '{record['artist_name']}', {record['duration']}, {record['artist_familiarity']}, {record['artist_hotttnesss']}, {record['year']}, {record['track_7digitalid']});\\n\")\n            # Write SQL INSERT statements for the events\n            for event in events:\n                user = event[\"user\"]",
-        "detail": "eventism",
+        "importPath": "eventism copy",
+        "description": "eventism copy",
+        "peekOfCode": "def write_to_sql_file(data, filename):\n    with open(filename, 'w') as sql_file:\n        # Write CREATE TABLE statement for the combined events table\n        sql_file.write(\"\"\"\nCREATE TABLE IF NOT EXISTS events (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    event_type VARCHAR(50),\n    timestamp DATETIME,\n    user_id INT,\n    user_name VARCHAR(255),",
+        "detail": "eventism copy",
         "documentation": {}
     },
     {
-        "label": "main",
+        "label": "run_simulation",
         "kind": 2,
-        "importPath": "eventism",
-        "description": "eventism",
-        "peekOfCode": "def main():\n    connection = connect_to_database()\n    data = fetch_data_from_database(connection)\n    events = generate_random_events(10)  # Generate 10 random events\n    # Create a filename with a timestamp\n    timestamp = datetime.now().strftime(\"%Y%m%d%H%M%S\")\n    filename = f\"output_{timestamp}.sql\"\n    combined_data = combine_data_and_events(data, events)\n    write_to_sql_file(combined_data, filename)\n    connection.close()",
-        "detail": "eventism",
-        "documentation": {}
-    },
-    {
-        "label": "main",
-        "kind": 2,
-        "importPath": "json2sql",
-        "description": "json2sql",
-        "peekOfCode": "def main():\n    # Read the JSON data\n    data = read_json_file('output.json')\n    print(f\"Read {len(data)} records from JSON file\")  # Debugging print statement\n    # Open the .sql file for writing\n    with open('output.sql', 'w') as sql_file:\n        # Write the SQL commands to create tables\n        create_tables(sql_file)\n        # Write the SQL commands to insert data\n        insert_data(sql_file, data)",
-        "detail": "json2sql",
-        "documentation": {}
-    },
-    {
-        "label": "read_json_file",
-        "kind": 2,
-        "importPath": "json2sql",
-        "description": "json2sql",
-        "peekOfCode": "def read_json_file(filename):\n    with open(filename, 'r') as file:\n        data = json.load(file)\n    return data\ndef create_tables(sql_file):\n    sql_file.write('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INT AUTO_INCREMENT PRIMARY KEY,\n            track_id VARCHAR(255),\n            title VARCHAR(255),",
-        "detail": "json2sql",
-        "documentation": {}
-    },
-    {
-        "label": "create_tables",
-        "kind": 2,
-        "importPath": "json2sql",
-        "description": "json2sql",
-        "peekOfCode": "def create_tables(sql_file):\n    sql_file.write('''\n        CREATE TABLE IF NOT EXISTS records (\n            id INT AUTO_INCREMENT PRIMARY KEY,\n            track_id VARCHAR(255),\n            title VARCHAR(255),\n            song_id VARCHAR(255),\n            release VARCHAR(255),\n            artist_id VARCHAR(255),\n            artist_mbid VARCHAR(255),",
-        "detail": "json2sql",
-        "documentation": {}
-    },
-    {
-        "label": "insert_data",
-        "kind": 2,
-        "importPath": "json2sql",
-        "description": "json2sql",
-        "peekOfCode": "def insert_data(sql_file, data):\n    for record in data:\n        record_data = record['record']\n        print(f\"Inserting record: {record_data}\")  # Debugging print statement\n        sql_file.write(f'''\n            INSERT INTO records (track_id, title, song_id, release, artist_id, artist_mbid, artist_name, duration, artist_familiarity, artist_hotttnesss, year, track_7digitalid)\n            VALUES ('{record_data['track_id']}', '{record_data['title']}', '{record_data['song_id']}', '{record_data['release']}', '{record_data['artist_id']}', '{record_data['artist_mbid']}', '{record_data['artist_name']}', {record_data['duration']}, {record_data['artist_familiarity']}, {record_data['artist_hotttnesss']}, {record_data['year']}, {record_data['track_7digitalid']});\n        ''')\n        record_id = 'LAST_INSERT_ID()'  # Use MySQL function to get the last inserted ID\n        for event in record['events']:",
-        "detail": "json2sql",
+        "importPath": "eventism copy",
+        "description": "eventism copy",
+        "peekOfCode": "def run_simulation():\n    base_path = \"simulation_data\"\n    if not os.path.exists(base_path):\n        os.makedirs(base_path)\n    current_folder = create_folder(base_path)\n    file_count = 0\n    total_iterations = 1 * 30  # 1 hours * 30 files per hour\n    connection = connect_to_database()\n    for i in range(total_iterations):\n        clear_console()",
+        "detail": "eventism copy",
         "documentation": {}
     },
     {

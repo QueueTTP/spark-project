@@ -5,7 +5,7 @@ import time
 import os
 import signal
 from mysql.connector import Error
-from config_source import db_config_source
+from config_source import db_config
 from config_destination import db_config_destination
 
 
@@ -262,10 +262,10 @@ def write_to_event_sim_db(data, connection):
     finally:
         cursor.close()
 
-def run_simulation(db_config_source, db_config_destination):
+def run_simulation(db_config, db_config_destination):
     global should_exit
     
-    connection_source = create_connection(db_config_source)
+    connection_source = create_connection(db_config)
     connection_destination = create_connection(db_config_destination)
 
     if not connection_source or not connection_destination:
@@ -307,7 +307,7 @@ def run_simulation(db_config_source, db_config_destination):
         print("Simulation ended. Database connections closed.")
 
 if __name__ == "__main__":
-    from config_source import db_config_source
+    from config_source import db_config
     from config_destination import db_config_destination
 
-    run_simulation(db_config_source, db_config_destination)
+    run_simulation(db_config, db_config_destination)
