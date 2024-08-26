@@ -51,15 +51,6 @@
         "documentation": {}
     },
     {
-        "label": "json",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
-        "documentation": {}
-    },
-    {
         "label": "datetime",
         "importPath": "datetime",
         "description": "datetime",
@@ -85,6 +76,15 @@
         "documentation": {}
     },
     {
+        "label": "signal",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "signal",
+        "description": "signal",
+        "detail": "signal",
+        "documentation": {}
+    },
+    {
         "label": "db_config",
         "importPath": "config_source",
         "description": "config_source",
@@ -93,20 +93,11 @@
         "documentation": {}
     },
     {
-        "label": "pandas",
-        "kind": 6,
+        "label": "db_config_destination",
+        "importPath": "config_destination",
+        "description": "config_destination",
         "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
-        "documentation": {}
-    },
-    {
-        "label": "db_config",
-        "importPath": "config",
-        "description": "config",
-        "isExtraImport": true,
-        "detail": "config",
+        "detail": "config_destination",
         "documentation": {}
     },
     {
@@ -128,120 +119,120 @@
         "documentation": {}
     },
     {
-        "label": "db_config",
-        "kind": 5,
-        "importPath": "config_template",
-        "description": "config_template",
-        "peekOfCode": "db_config = mysql.connector.connect(\n                host=\"localhost\",\n                user=\"root\",\n                password=\"new_password\",\n                database=\"million_songs\"\n            )",
-        "detail": "config_template",
+        "label": "get_weighted_time_of_day",
+        "kind": 2,
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def get_weighted_time_of_day():\n    time_of_day_weights = {\n        \"00:00-04:00\": 2,    # Early morning, less likely\n        \"04:00-06:00\": 5,    # Early morning\n        \"06:00-09:00\": 15,   # Morning commute\n        \"09:00-12:00\": 25,   # Morning work hours\n        \"12:00-15:00\": 30,   # Afternoon work hours\n        \"15:00-18:00\": 35,   # Evening commute\n        \"18:00-21:00\": 50,   # Evening leisure time, most likely\n        \"21:00-23:59\": 20    # Late evening",
+        "detail": "eventsim",
+        "documentation": {}
+    },
+    {
+        "label": "generate_random_timestamp",
+        "kind": 2,
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def generate_random_timestamp():\n    random_date = datetime.now() - timedelta(days=random.randint(0, 365))\n    random_time = get_weighted_time_of_day()\n    return datetime.combine(random_date.date(), random_time)\n# Global flag to indicate if the program should exit\nshould_exit = False\ndef signal_handler(signum, frame):\n    global should_exit\n    print(\"\\nReceived exit signal. Finishing current iteration and exiting...\")\n    should_exit = True",
+        "detail": "eventsim",
+        "documentation": {}
+    },
+    {
+        "label": "signal_handler",
+        "kind": 2,
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def signal_handler(signum, frame):\n    global should_exit\n    print(\"\\nReceived exit signal. Finishing current iteration and exiting...\")\n    should_exit = True\n# Set up the signal handler\nsignal.signal(signal.SIGINT, signal_handler)\ndef clear_console():\n    if os.name == 'nt':\n        _ = os.system('clear')\ndef connect_to_database(db_config):",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
         "label": "clear_console",
         "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def clear_console():\n    if os.name == 'nt':\n        _ = os.system('clear')\ndef connect_to_database():\n    return mysql.connector.connect(**db_config)\ndef fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs ORDER BY RAND() LIMIT %s\", (limit,))\n    return cursor.fetchall()\ndef generate_random_events(num_events):",
-        "detail": "eventism copy",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def clear_console():\n    if os.name == 'nt':\n        _ = os.system('clear')\ndef connect_to_database(db_config):\n    return mysql.connector.connect(**db_config)\ndef fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"\"\"\n    SELECT *, `release` AS `release_date` \n    FROM songs ",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
         "label": "connect_to_database",
         "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def connect_to_database():\n    return mysql.connector.connect(**db_config)\ndef fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs ORDER BY RAND() LIMIT %s\", (limit,))\n    return cursor.fetchall()\ndef generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,",
-        "detail": "eventism copy",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def connect_to_database(db_config):\n    return mysql.connector.connect(**db_config)\ndef fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"\"\"\n    SELECT *, `release` AS `release_date` \n    FROM songs \n    ORDER BY RAND() \n    LIMIT %s\n    \"\"\", (limit,))",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
         "label": "fetch_data_from_database",
         "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"SELECT * FROM songs ORDER BY RAND() LIMIT %s\", (limit,))\n    return cursor.fetchall()\ndef generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,\n                   \"removed from playlist\":5,\n                   \"liked song\": 15,",
-        "detail": "eventism copy",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def fetch_data_from_database(connection, limit=1000):\n    cursor = connection.cursor(dictionary=True)\n    cursor.execute(\"\"\"\n    SELECT *, `release` AS `release_date` \n    FROM songs \n    ORDER BY RAND() \n    LIMIT %s\n    \"\"\", (limit,))\n    return cursor.fetchall()\n# Option 2: Ensuring that some users listen to multiple songs",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
         "label": "generate_random_events",
         "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def generate_random_events(num_events):\n    events = []\n    event_types = {\"streamed song\": 65,\n                   \"added to playlist\": 10,\n                   \"removed from playlist\":5,\n                   \"liked song\": 15,\n                   \"disliked song\": 5\n                   }\n    age_distribution = {\n        \"18-24 years old\": 30,",
-        "detail": "eventism copy",
-        "documentation": {}
-    },
-    {
-        "label": "create_folder",
-        "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def create_folder(base_path):\n    folder_count = 1\n    while True:\n        folder_name = f\"folder_{folder_count:03d}\"\n        folder_path = os.path.join(base_path, folder_name)\n        if not os.path.exists(folder_path):\n            os.makedirs(folder_path)\n            return folder_path\n        folder_count += 1\ndef combine_data_and_events(data, events):",
-        "detail": "eventism copy",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def generate_random_events(num_events):\n    events = []\n    # Event types and distributions\n    event_types = {\n        \"streamed song\": 65, \n        \"added to playlist\": 10, \n        \"removed from playlist\": 5, \n        \"liked song\": 15, \n        \"disliked song\": 5\n    }",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
         "label": "combine_data_and_events",
         "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, min(5, len(events))))  # Limit to max 5 events per record\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\ndef write_to_sql_file(data, filename):",
-        "detail": "eventism copy",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def combine_data_and_events(data, events):\n    combined = []\n    for record in data:\n        record_events = random.sample(events, random.randint(1, min(5, len(events))))\n        combined.append({\n            \"record\": record,\n            \"events\": record_events\n        })\n    return combined\ndef create_connection(db_config):",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
-        "label": "write_to_sql_file",
+        "label": "create_connection",
         "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def write_to_sql_file(data, filename):\n    with open(filename, 'w') as sql_file:\n        # Write CREATE TABLE statement for the combined events table\n        sql_file.write(\"\"\"\nCREATE TABLE IF NOT EXISTS events (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    event_type VARCHAR(50),\n    timestamp DATETIME,\n    user_id INT,\n    user_name VARCHAR(255),",
-        "detail": "eventism copy",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def create_connection(db_config):\n    try:\n        connection = mysql.connector.connect(**db_config)\n        return connection\n    except mysql.connector.Error as e:\n        print(f\"Error connecting to MySQL database: {e}\")\n        return None\ndef write_to_event_sim_db(data, connection):\n    try:\n        cursor = connection.cursor()",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
-        "label": "run_simulation",
+        "label": "write_to_event_sim_db",
         "kind": 2,
-        "importPath": "eventism copy",
-        "description": "eventism copy",
-        "peekOfCode": "def run_simulation():\n    base_path = \"simulation_data\"\n    if not os.path.exists(base_path):\n        os.makedirs(base_path)\n    current_folder = create_folder(base_path)\n    file_count = 0\n    total_iterations = 1 * 30  # 1 hours * 30 files per hour\n    connection = connect_to_database()\n    for i in range(total_iterations):\n        clear_console()",
-        "detail": "eventism copy",
-        "documentation": {}
-    },
-    {
-        "label": "clear_console",
-        "kind": 2,
-        "importPath": "retrieve_sim",
-        "description": "retrieve_sim",
-        "peekOfCode": "def clear_console():\n    if os.name == 'nt':\n        _ = os.system('clear')\n# Function to get random data from MySQL\ndef get_random_data():\n    try:\n        conn = mysql.connector.connect(**db_config)\n        cursor = conn.cursor(dictionary=True)\n        query = \"\"\"\n        SELECT `track_id`, `title`, `song_id`, `release`, `artist_id`, `artist_mbid`, ",
-        "detail": "retrieve_sim",
-        "documentation": {}
-    },
-    {
-        "label": "get_random_data",
-        "kind": 2,
-        "importPath": "retrieve_sim",
-        "description": "retrieve_sim",
-        "peekOfCode": "def get_random_data():\n    try:\n        conn = mysql.connector.connect(**db_config)\n        cursor = conn.cursor(dictionary=True)\n        query = \"\"\"\n        SELECT `track_id`, `title`, `song_id`, `release`, `artist_id`, `artist_mbid`, \n               `artist_name`, `duration`, `artist_familiarity`, `artist_hotttnesss`, \n               `year`, `track_7digitalid`\n        FROM songs\n        ORDER BY RAND()",
-        "detail": "retrieve_sim",
-        "documentation": {}
-    },
-    {
-        "label": "simulate_listen_event",
-        "kind": 2,
-        "importPath": "retrieve_sim",
-        "description": "retrieve_sim",
-        "peekOfCode": "def simulate_listen_event(track):\n    print(f\"Simulated listen event for track: {track['title']} by {track['artist_name']}\")\n# Main simulation loop\ndef run_simulation():\n    for i in range(5):  # 5 iterations = 10 minutes\n        clear_console()\n        print(f\"Iteration {i+1} - Time: {time.strftime('%Y-%m-%d %H:%M:%S')}\")\n        df = get_random_data()\n        if not df.empty:\n            print(df)",
-        "detail": "retrieve_sim",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def write_to_event_sim_db(data, connection):\n    try:\n        cursor = connection.cursor()\n        # Create the events table if it doesn't exist\n        create_table_query = \"\"\"\n        CREATE TABLE IF NOT EXISTS `events` (\n            `id` INT AUTO_INCREMENT PRIMARY KEY,\n            `event_type` VARCHAR(50),\n            `timestamp` DATETIME,\n            `user_id` INT,",
+        "detail": "eventsim",
         "documentation": {}
     },
     {
         "label": "run_simulation",
         "kind": 2,
-        "importPath": "retrieve_sim",
-        "description": "retrieve_sim",
-        "peekOfCode": "def run_simulation():\n    for i in range(5):  # 5 iterations = 10 minutes\n        clear_console()\n        print(f\"Iteration {i+1} - Time: {time.strftime('%Y-%m-%d %H:%M:%S')}\")\n        df = get_random_data()\n        if not df.empty:\n            print(df)\n            # Simulate a listen event for each track\n            for _, track in df.iterrows():\n                simulate_listen_event(track)",
-        "detail": "retrieve_sim",
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "def run_simulation(db_config, db_config_destination):\n    global should_exit\n    connection_source = create_connection(db_config)\n    connection_destination = create_connection(db_config_destination)\n    if not connection_source or not connection_destination:\n        print(\"Failed to establish database connections. Exiting.\")\n        return\n    total_iterations = 1 * 30  # 30 hours * 30 files per hour\n    try:\n        for i in range(total_iterations):",
+        "detail": "eventsim",
+        "documentation": {}
+    },
+    {
+        "label": "should_exit",
+        "kind": 5,
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "should_exit = False\ndef signal_handler(signum, frame):\n    global should_exit\n    print(\"\\nReceived exit signal. Finishing current iteration and exiting...\")\n    should_exit = True\n# Set up the signal handler\nsignal.signal(signal.SIGINT, signal_handler)\ndef clear_console():\n    if os.name == 'nt':\n        _ = os.system('clear')",
+        "detail": "eventsim",
+        "documentation": {}
+    },
+    {
+        "label": "user_id_pool",
+        "kind": 5,
+        "importPath": "eventsim",
+        "description": "eventsim",
+        "peekOfCode": "user_id_pool = [random.randint(1, 1000) for _ in range(100)]  # Create a pool of 100 user IDs\ndef generate_random_events(num_events):\n    events = []\n    # Event types and distributions\n    event_types = {\n        \"streamed song\": 65, \n        \"added to playlist\": 10, \n        \"removed from playlist\": 5, \n        \"liked song\": 15, \n        \"disliked song\": 5",
+        "detail": "eventsim",
         "documentation": {}
     }
 ]
